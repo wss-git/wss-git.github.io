@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H5电子钱包原型 - Tegro风格</title>
+    <link href="https://cdn.tailwindcss.com/3.3.0" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: #f7f9fb;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(390px, 1fr));
+            gap: 32px;
+            padding: 32px;
+            max-width: 1600px;
+            margin: 0 auto;
+            justify-items: center;
+        }
+        .page-card {
+            background: #fff;
+            border-radius: 32px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+            overflow: hidden;
+            height: 844px;
+            width: 390px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        .status-bar {
+            height: 44px;
+            background: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 18px;
+            color: #222;
+            font-size: 15px;
+            font-weight: 600;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .main-header {
+            background: #fff;
+            padding: 0 20px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .main-header .title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #222;
+        }
+        .main-header .header-actions i {
+            font-size: 20px;
+            margin-left: 20px;
+            color: #222;
+            cursor: pointer;
+        }
+        .asset-card {
+            background: linear-gradient(135deg, #2b9cff 0%, #3be3e3 100%);
+            color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 24px rgba(43,156,255,0.10);
+            padding: 24px 20px 20px 20px;
+            margin: 24px 20px 16px 20px;
+            position: relative;
+        }
+        .asset-card .wallet-title {
+            font-size: 16px;
+            font-weight: 600;
+            opacity: 0.95;
+        }
+        .asset-card .wallet-address {
+            font-size: 30px !important;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .asset-card .asset-balance {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            letter-spacing: 1px;
+        }
+        .asset-card .asset-actions {
+            display: flex;
+            gap: 16px;
+        }
+        .asset-card .asset-actions button {
+            flex: 1;
+            background: rgba(255,255,255,0.18);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 0;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(43,156,255,0.08);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .asset-card .asset-actions button:hover {
+            background: rgba(255,255,255,0.28);
+        }
+        .tab-bar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: #fff;
+            border-bottom: 1px solid #f0f0f0;
+            height: 48px;
+            margin: 0 0 8px 0;
+        }
+        .tab-bar .tab {
+            flex: 1;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            color: #8ca0b3;
+            padding: 10px 0 8px 0;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: color 0.2s, border 0.2s;
+        }
+        .tab-bar .tab.active {
+            color: #2b9cff;
+            border-bottom: 2px solid #2b9cff;
+            background: #f7f9fb;
+        }
+        .section-card {
+            background: #f3f6fa;
+            border-radius: 16px;
+            margin: 16px 20px;
+            padding: 18px 12px;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 10px;
+        }
+        .token-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #eaf2fb;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+        }
+        .token-row .token-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .token-row .token-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #2b9cff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 20px;
+        }
+        .token-row .token-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #222;
+        }
+        .token-row .token-balance {
+            font-size: 16px;
+            font-weight: 700;
+            color: #222;
+        }
+        .token-row .token-amount {
+            font-size: 13px;
+            color: #8ca0b3;
+        }
+        .custom-token-card {
+            background: #eaf2fb;
+            border-radius: 12px;
+            padding: 18px 14px;
+            text-align: center;
+            color: #8ca0b3;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+        .manage-token-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            color: #2b9cff;
+            font-weight: 600;
+            font-size: 15px;
+            background: none;
+            border: none;
+            margin: 0 auto;
+            margin-top: 6px;
+            cursor: pointer;
+        }
+        .bottom-nav {
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            height: 64px;
+            background: #fff;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 10;
+        }
+        .bottom-nav .nav-item {
+            flex: 1;
+            text-align: center;
+            color: #8ca0b3;
+            font-size: 22px;
+            padding-top: 8px;
+            transition: color 0.2s;
+        }
+        .bottom-nav .nav-item.active {
+            color: #2b9cff;
+        }
+        .bottom-nav .nav-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+        /* 适配滚动 */
+        .page-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 80px;
+        }
+        /* 按钮样式 */
+        .btn-main {
+            background: linear-gradient(90deg, #2b9cff 0%, #3be3e3 100%);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 0;
+            font-size: 17px;
+            font-weight: 700;
+            width: 100%;
+            margin-top: 18px;
+            box-shadow: 0 2px 8px rgba(43,156,255,0.08);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-main:active {
+            background: linear-gradient(90deg, #3be3e3 0%, #2b9cff 100%);
+        }
+        .input-group {
+            margin-bottom: 18px;
+        }
+        .input-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .input-box {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #e3eaf2;
+            border-radius: 10px;
+            font-size: 16px;
+            background: #f7f9fb;
+            color: #222;
+            outline: none;
+            transition: border 0.2s;
+        }
+        .input-box:focus {
+            border: 1.5px solid #2b9cff;
+            background: #fff;
+        }
+        .coin-select-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .coin-select-btn {
+            flex: 1;
+            background: #eaf2fb;
+            border: 1.5px solid #eaf2fb;
+            border-radius: 10px;
+            padding: 10px 0;
+            text-align: center;
+            color: #2b9cff;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: border 0.2s, background 0.2s;
+        }
+        .coin-select-btn.active {
+            background: #fff;
+            border: 1.5px solid #2b9cff;
+        }
+        .qr-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 24px 0 18px 0;
+        }
+        .qr-box {
+            width: 160px;
+            height: 160px;
+            background: linear-gradient(135deg, #2b9cff 0%, #3be3e3 100%);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 60px;
+            margin-bottom: 14px;
+        }
+        .share-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .share-btn {
+            flex: 1;
+            background: #eaf2fb;
+            color: #2b9cff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 0;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .share-btn:active {
+            background: #d0e7fa;
+        }
+        .nft-wall {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+        .nft-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(43,156,255,0.08);
+            overflow: hidden;
+            margin-bottom: 2px;
+        }
+        .nft-card img {
+            width: 100%;
+            height: 90px;
+            object-fit: cover;
+        }
+        .nft-card .nft-info {
+            padding: 10px 10px 8px 10px;
+        }
+        .nft-card .nft-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 2px;
+        }
+        .nft-card .nft-meta {
+            font-size: 12px;
+            color: #8ca0b3;
+            margin-bottom: 4px;
+        }
+        .nft-card .nft-price {
+            font-size: 14px;
+            color: #2b9cff;
+            font-weight: 700;
+        }
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #eaf2fb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #2b9cff;
+            margin-right: 14px;
+        }
+        .profile-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .profile-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #222;
+        }
+        .profile-id {
+            font-size: 13px;
+            color: #8ca0b3;
+        }
+        .profile-section {
+            background: #f3f6fa;
+            border-radius: 16px;
+            margin: 16px 20px;
+            padding: 18px 16px;
+        }
+        .input-group .input-box {
+            width: 100%;
+            box-sizing: border-box;
+            margin: 0;
+        }
+        .section-card {
+            box-sizing: border-box;
+        }
+        .receive-address {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 500;
+            color: #222;
+            margin: 0 auto 8px auto;
+        }
+        .asset-card {
+            /* min-height: 210px; */
+            /* padding-top: 36px; */
+            /* padding-bottom: 32px; */
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen">
+        <div class="text-center py-8">
+            <h1 class="text-gray-800 text-3xl font-bold mb-2">QQC钱包演示效果</h1>
+            <p class="text-gray-600">所有页面网格展示</p>
+        </div>
+        <div class="grid-container">
+            <!-- 首页 -->
+            <div class="page-card">
+                <div class="status-bar">
+                    <span>9:41</span>
+                    <div class="flex items-center space-x-1">
+                        <i class="fas fa-signal text-xs"></i>
+                        <i class="fas fa-wifi text-xs"></i>
+                        <i class="fas fa-battery-three-quarters text-xs"></i>
+                    </div>
+                </div>
+                <div class="main-header">
+                    <span class="title">首页</span>
+                    <div class="header-actions">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+                <div class="page-content">
+                    <div class="asset-card">
+                        <div class="wallet-title">总资产</div>
+                        <div class="wallet-address" style="margin-bottom:4px;">$1520,056</div>
+                        <div style="font-size:15px;color:#fff;opacity:0.95;margin-bottom:2px;">QQC币余额：888</div>
+                        <div style="font-size:15px;color:#fff;opacity:0.95;margin-bottom:2px;">USDT余额：1,234.56</div>
+                        <div style="font-size:15px;color:#fff;opacity:0.95;margin-bottom:18px;">NFT数量：3</div>
+                        <div class="asset-actions" style="gap:12px;">
+                            <button>充值</button>
+                            <button>质押</button>
+                            <button>NFT</button>
+                        </div>
+                    </div>
+                    <!-- 删除首页tab-bar（Assets/NFT/History）相关代码 -->
+                    <!-- 原section-card内容删除，替换为如下内容 -->
+                    <div class="section-card" style="margin-bottom:18px;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                            <div style="font-size:15px;color:#222;font-weight:600;">昨日收益</div>
+                            <div style="font-size:15px;color:#2b9cff;font-weight:700;">+12.50 QQC</div>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <div style="font-size:15px;color:#222;font-weight:600;">累计收益</div>
+                            <div style="font-size:15px;color:#2b9cff;font-weight:700;">+1,250.00 QQC</div>
+                        </div>
+                    </div>
+                    <div class="section-card" style="margin-bottom:18px;">
+                        <div style="font-size:12px;color:#222;margin-bottom:6px;font-weight:400;">欢迎使用QQC钱包，体验安全便捷的数字资产管理服务！</div>
+                    </div>
+                    <div class="section-card">
+                        <div style="font-size:15px;color:#222;font-weight:600;margin-bottom:8px;">QQC市场行情</div>
+                        <div style="display:flex;align-items:center;gap:18px;">
+                            <div style="font-size:14px;color:#8ca0b3;">最新价</div>
+                            <div style="font-size:18px;color:#2b9cff;font-weight:700;">0.41 U</div>
+                            <div style="font-size:14px;color:#10b981;">+2.5%</div>
+                        </div>
+                        <div style="font-size:13px;color:#8ca0b3;margin-top:4px;">24H高 0.43 U&nbsp;&nbsp;|&nbsp;&nbsp;24H低 0.39 U</div>
+                    </div>
+                </div>
+            </div>
+            <!-- 新增社区页面 -->
+            <div class="page-card">
+                <div class="status-bar">
+                    <span>9:41</span>
+                    <div class="flex items-center space-x-1">
+                        <i class="fas fa-signal text-xs"></i>
+                        <i class="fas fa-wifi text-xs"></i>
+                        <i class="fas fa-battery-three-quarters text-xs"></i>
+                    </div>
+                </div>
+                <div class="main-header">
+                    <span class="title">交易</span>
+                    <div class="header-actions">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+                <div class="page-content" style="padding-bottom:120px;">
+                    <!-- 均价部分 -->
+                    <div class="section-card" style="text-align:center;">
+                        <div class="section-title" style="font-size:20px;">今日QQC均价</div>
+                        <div style="font-size:32px;font-weight:700;color:#2b9cff;margin-bottom:8px;">0.41 U</div>
+                        <div style="color:#8ca0b3;font-size:14px;">数据来源：平台撮合成交均价</div>
+                    </div>
+                    <!-- 交易页面 今日均价下方、求购列表上方插入tab组件 -->
+                    <div class="tab-bar" style="margin-bottom: 0;">
+                        <div class="tab active">市场交易</div>
+                        <div class="tab">NFT交易</div>
+                    </div>
+                    <!-- 求购列表 -->
+                    <div class="section-card">
+                        <div class="section-title">求购列表</div>
+                        <div style="display:flex;align-items:center;justify-content:space-between;background:#eaf2fb;border-radius:12px;padding:16px 12px;margin-bottom:14px;">
+                            <div style="display:flex;align-items:center;gap:12px;">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" style="width:44px;height:44px;border-radius:50%;object-fit:cover;">
+                                <div>
+                                    <div style="font-weight:600;font-size:16px;">用户A</div>
+                                    <div style="font-size:13px;color:#8ca0b3;">求购 500 QQC</div>
+                                    <div style="font-size:13px;color:#2b9cff;">出价 0.40 U/QQC</div>
+                                </div>
+                            </div>
+                            <button class="btn-main" style="width:90px;padding:10px 0;font-size:15px;box-shadow:none;">交易</button>
+                        </div>
+                        <div style="display:flex;align-items:center;justify-content:space-between;background:#eaf2fb;border-radius:12px;padding:16px 12px;margin-bottom:14px;">
+                            <div style="display:flex;align-items:center;gap:12px;">
+                                <img src="https://randomuser.me/api/portraits/women/44.jpg" style="width:44px;height:44px;border-radius:50%;object-fit:cover;">
+                                <div>
+                                    <div style="font-weight:600;font-size:16px;">用户B</div>
+                                    <div style="font-size:13px;color:#8ca0b3;">求购 1200 QQC</div>
+                                    <div style="font-size:13px;color:#2b9cff;">出价 0.39 U/QQC</div>
+                                </div>
+                            </div>
+                            <button class="btn-main" style="width:90px;padding:10px 0;font-size:15px;box-shadow:none;">交易</button>
+                        </div>
+                        <div style="display:flex;align-items:center;justify-content:space-between;background:#eaf2fb;border-radius:12px;padding:16px 12px;margin-bottom:14px;">
+                            <div style="display:flex;align-items:center;gap:12px;">
+                                <img src="https://randomuser.me/api/portraits/men/55.jpg" style="width:44px;height:44px;border-radius:50%;object-fit:cover;">
+                                <div>
+                                    <div style="font-weight:600;font-size:16px;">用户C</div>
+                                    <div style="font-size:13px;color:#8ca0b3;">求购 300 QQC</div>
+                                    <div style="font-size:13px;color:#2b9cff;">出价 0.38 U/QQC</div>
+                                </div>
+                            </div>
+                            <button class="btn-main" style="width:90px;padding:10px 0;font-size:15px;box-shadow:none;">交易</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- 悬浮底部按钮，仅社区页面有 -->
+                <!-- 该按钮已被移除 -->
+                <!-- 删除此处.bottom-nav相关的div及其内容 -->
+            </div>
+            <!-- NFT页面 -->
+            <div class="page-card">
+                <div class="status-bar">
+                    <span>9:41</span>
+                    <div class="flex items-center space-x-1">
+                        <i class="fas fa-signal text-xs"></i>
+                        <i class="fas fa-wifi text-xs"></i>
+                        <i class="fas fa-battery-three-quarters text-xs"></i>
+                    </div>
+                </div>
+                <div class="main-header">
+                    <span class="title">NFT</span>
+                    <div class="header-actions">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+                <div class="page-content">
+                    <!-- 复制“今日QQC均价”板块 -->
+                    <div class="section-card" style="text-align:center;">
+                        <div class="section-title" style="font-size:20px;">今日QQC均价</div>
+                        <div style="font-size:32px;font-weight:700;color:#2b9cff;margin-bottom:8px;">0.41 U</div>
+                        <div style="color:#8ca0b3;font-size:14px;">数据来源：平台撮合成交均价</div>
+                    </div>
+                    <!-- NFT页面tab组件改为2项 -->
+                    <div class="tab-bar">
+                        <div class="tab">市场交易</div>
+                        <div class="tab active">NFT交易</div>
+                    </div>
+                    <div class="section-card">
+                        <div class="nft-wall">
+                            <div class="nft-card">
+                                <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=200&h=200&fit=crop">
+                                <div class="nft-info">
+                                    <div class="nft-title">QQC Genesis NFT</div>
+                                    <div class="nft-meta">限量发行 1000 枚</div>
+                                    <div class="nft-price">500 QQC</div>
+                                </div>
+                            </div>
+                            <div class="nft-card">
+                                <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=200&h=200&fit=crop">
+                                <div class="nft-info">
+                                    <div class="nft-title">QQC Art Collection</div>
+                                    <div class="nft-meta">限量发行 500 枚</div>
+                                    <div class="nft-price">800 QQC</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 个人中心页面 -->
+            <div class="page-card">
+                <div class="status-bar">
+                    <span>9:41</span>
+                    <div class="flex items-center space-x-1">
+                        <i class="fas fa-signal text-xs"></i>
+                        <i class="fas fa-wifi text-xs"></i>
+                        <i class="fas fa-battery-three-quarters text-xs"></i>
+                    </div>
+                </div>
+                <div class="main-header">
+                    <span class="title">我的</span>
+                    <div class="header-actions">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+                <div class="page-content">
+                    <div class="profile-section">
+                        <div class="profile-info">
+                            <div class="profile-avatar"><i class="fas fa-user"></i></div>
+                            <div>
+                                <div class="profile-name">张三</div>
+                                <div class="profile-id">ID: 888888 | 黄金节点</div>
+                            </div>
+                        </div>
+                        <!-- 替换“我的”页面资产卡片为交易地址字段 -->
+                        <div class="section-card" style="margin-bottom:18px;">
+                            <div style="font-size:15px;font-weight:600;margin-bottom:6px;">交易地址</div>
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <span style="font-size:14px;color:#374151;word-break:break-all;">0x1234567890abcdef1234567890abcdef12345678</span>
+                                <button style="background:#2563eb;color:#fff;border:none;border-radius:6px;width:56px;height:36px;display:flex;align-items:center;justify-content:center;font-size:20px;">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-section">
+                        <div class="section-title">功能菜单</div>
+                        <div class="coin-select-row">
+                            <button class="coin-select-btn"><i class="fas fa-shield-alt"></i> 安全中心</button>
+                            <button class="coin-select-btn"><i class="fas fa-wallet"></i> 钱包管理</button>
+                        </div>
+                        <div class="coin-select-row">
+                            <button class="coin-select-btn"><i class="fas fa-bell"></i> 消息通知</button>
+                            <button class="coin-select-btn"><i class="fas fa-headset"></i> 客服支持</button>
+                        </div>
+                    </div>
+                    <!-- 在“我的”页面section-card后追加如下内容 -->
+                    <div class="section-card">
+                        <div style="font-size:16px;font-weight:700;margin-bottom:8px;">当前节点等级</div>
+                        <div style="font-size:15px;font-weight:600;">高级节点</div>
+                        <div style="font-size:14px;color:#374151;margin-bottom:4px;">个人持有：5,000U &nbsp;&nbsp; 社区规模：20,000U</div>
+                        <div style="font-size:13px;color:#8ca0b3;">升级为超级节点需：个人3万U，社区15万U</div>
+                    </div>
+                    <div class="section-card">
+                        <div style="font-size:16px;font-weight:700;margin-bottom:8px;">社区成员 <span style="font-size:13px;font-weight:400;float:right;color:#2b9cff;cursor:pointer;">全部</span></div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                            <span>用户A</span><span style="color:#8ca0b3;">持有 2,000U</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                            <span>用户B</span><span style="color:#8ca0b3;">持有 1,500U</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <span>用户C</span><span style="color:#8ca0b3;">持有 1,000U</span>
+                        </div>
+                    </div>
+                    <div class="section-card">
+                        <div style="font-size:16px;font-weight:700;margin-bottom:8px;">推广工具</div>
+                        <div style="display:flex;align-items:center;margin-bottom:8px;">
+                            <span style="color:#2b9cff;margin-right:8px;"><i class="fas fa-link"></i></span>
+                            <span style="font-size:14px;">https://qqc.app/invite/123456</span>
+                            <button style="margin-left:auto;background:#2563eb;color:#fff;border:none;border-radius:6px;padding:4px 14px;font-size:13px;">复制</button>
+                        </div>
+                        <div style="display:flex;align-items:center;">
+                            <span style="color:#059669;margin-right:8px;"><i class="fas fa-qrcode"></i></span>
+                            <span style="font-size:14px;">专属二维码</span>
+                            <button style="margin-left:auto;background:#059669;color:#fff;border:none;border-radius:6px;padding:4px 14px;font-size:13px;">下载</button>
+                        </div>
+                    </div>
+                    <div class="section-card">
+                        <div style="font-size:16px;font-weight:700;margin-bottom:8px;">收益分配</div>
+                        <ul style="font-size:14px;color:#374151;line-height:1.8;margin:0;padding-left:18px;">
+                            <li>推广收益权：100%</li>
+                            <li>特惠产出分红：10%</li>
+                            <li>团队奖励、等级晋升奖励</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- 删除“我的”页面底部导航栏相关代码（即<div class="bottom-nav">...</div>） -->
+            </div>
+            <!-- 新增质押页面 -->
+            <div class="page-card">
+                <div class="status-bar">
+                    <span>9:41</span>
+                    <div class="flex items-center space-x-1">
+                        <i class="fas fa-signal text-xs"></i>
+                        <i class="fas fa-wifi text-xs"></i>
+                        <i class="fas fa-battery-three-quarters text-xs"></i>
+                    </div>
+                </div>
+                <div class="main-header">
+                    <span class="title">质押</span>
+                    <div class="header-actions">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+                <div class="page-content">
+                    <div class="section-card" style="background:linear-gradient(135deg,#5b7cfa 0%,#6ad1e3 100%);color:#fff;">
+                        <div style="font-size:16px;font-weight:600;">质押总额</div>
+                        <div style="font-size:32px;font-weight:700;margin:8px 0 6px 0;">50,000</div>
+                        <div style="font-size:15px;">年化收益率：36.5% &nbsp;&nbsp; 日收益率：0.1%</div>
+                        <div style="position:absolute;top:24px;right:32px;font-size:22px;"><i class="fas fa-lock"></i></div>
+                    </div>
+                    <div style="display:flex;gap:18px;justify-content:center;margin:24px 0 18px 0;">
+                        <button style="background:#f3f6fa;border:none;border-radius:16px;padding:18px 28px;display:flex;flex-direction:column;align-items:center;gap:8px;font-size:15px;font-weight:600;box-shadow:0 2px 8px rgba(43,156,255,0.08);color:#2563eb;">
+                            <i class="fas fa-plus-circle" style="font-size:22px;"></i>
+                            新增质押
+                        </button>
+                        <button style="background:#f3f6fa;border:none;border-radius:16px;padding:18px 28px;display:flex;flex-direction:column;align-items:center;gap:8px;font-size:15px;font-weight:600;box-shadow:0 2px 8px rgba(43,156,255,0.08);color:#059669;">
+                            <i class="fas fa-unlock-alt" style="font-size:22px;"></i>
+                            解除质押
+                        </button>
+                        <button style="background:#f3f6fa;border:none;border-radius:16px;padding:18px 28px;display:flex;flex-direction:column;align-items:center;gap:8px;font-size:15px;font-weight:600;box-shadow:0 2px 8px rgba(43,156,255,0.08);color:#f59e42;">
+                            <i class="fas fa-hand-holding-usd" style="font-size:22px;"></i>
+                            提取收益
+                        </button>
+                    </div>
+                    <div class="section-card" style="margin-bottom:18px;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;font-size:16px;font-weight:700;">
+                            <span>累计收益</span>
+                            <span style="color:#10b981;font-size:18px;">+8,800</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;font-size:15px;margin-top:6px;">
+                            <span>昨日收益</span>
+                            <span style="color:#10b981;">+320</span>
+                        </div>
+                    </div>
+                    <div class="section-card">
+                        <div style="font-size:16px;font-weight:700;margin-bottom:8px;">质押历史 <span style="font-size:13px;font-weight:400;float:right;color:#2b9cff;cursor:pointer;">全部</span></div>
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:15px;color:#2563eb;">
+                            <i class="fas fa-plus-circle"></i> 新增质押 10,000 <span style="color:#8ca0b3;font-size:13px;margin-left:8px;">2024-05-01</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:15px;color:#f59e42;">
+                            <i class="fas fa-hand-holding-usd"></i> 提取收益 320 <span style="color:#8ca0b3;font-size:13px;margin-left:8px;">2024-05-02</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:8px;font-size:15px;color:#059669;">
+                            <i class="fas fa-unlock-alt"></i> 解除质押 5,000 <span style="color:#8ca0b3;font-size:13px;margin-left:8px;">2024-05-03</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 充值页面币种改为USDT，删除充值金额输入板块 -->
+            <div class="page-card">
+                <div class="status-bar">
+                    <span>9:41</span>
+                    <div class="flex items-center space-x-1">
+                        <i class="fas fa-signal text-xs"></i>
+                        <i class="fas fa-wifi text-xs"></i>
+                        <i class="fas fa-battery-three-quarters text-xs"></i>
+                    </div>
+                </div>
+                <div class="main-header">
+                    <span class="title">充值</span>
+                    <div class="header-actions">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+                <div class="page-content">
+                    <div class="section-card">
+                        <div class="input-group">
+                            <label class="input-label">充值币种</label>
+                            <div class="coin-select-row">
+                                <button class="coin-select-btn active">USDT</button>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">充值地址</label>
+                            <input class="input-box" type="text" value="0x1234567890abcdef1234567890abcdef12345678" readonly>
+                            <button class="manage-token-btn" style="margin-top:8px;"><i class="fas fa-copy"></i>复制地址</button>
+                        </div>
+                        <div class="qr-area">
+                            <div class="qr-box"><i class="fas fa-qrcode"></i></div>
+                        </div>
+                        <!-- 充值金额输入板块已删除 -->
+                        <div style="text-align:center;font-size:15px;color:#2b9cff;font-weight:600;margin-bottom:10px;">当前USDT余额：1,234.56</div>
+                        <div class="custom-token-card" style="margin-top:10px;">请将USDT转入上述地址，到账后自动入账。充值仅支持主链转账，暂不支持合约转账。</div>
+                        <!-- 确认充值按钮已删除 -->
+                    </div>
+                    <!-- 充值记录区币种全部改为USDT -->
+                    <div class="section-card">
+                        <div class="section-title">充值记录</div>
+                        <div class="token-row">
+                            <div class="token-info">
+                                <div class="token-icon bg-green-500"><i class="fas fa-arrow-down"></i></div>
+                                <div>
+                                    <div class="token-name">充值成功</div>
+                                    <div class="token-amount">+100.00 USDT</div>
+                                </div>
+                            </div>
+                            <div class="token-balance text-green-500">2分钟前</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 删除“充值”页面底部导航栏相关代码（即<div class="bottom-nav">...</div>） -->
+            </div>
+            <!-- 登录页面 -->
+            <div class="page-card">
+                <div class="status-bar">
+                    <span>9:41</span>
+                    <div class="flex items-center space-x-1">
+                        <i class="fas fa-signal text-xs"></i>
+                        <i class="fas fa-wifi text-xs"></i>
+                        <i class="fas fa-battery-three-quarters text-xs"></i>
+                    </div>
+                </div>
+                <div class="main-header">
+                    <span class="title">登录</span>
+                    <div class="header-actions">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+                <div class="page-content flex flex-col items-center justify-center" style="padding-top:60px;">
+                    <div style="margin-bottom:32px;text-align:center;">
+                        <span style="font-size:32px;font-weight:700;color:#2b9cff;letter-spacing:1px;">QQC Wallet</span>
+                    </div>
+                    <div class="section-card" style="width:100%;max-width:320px;">
+                        <div class="input-group">
+                            <label class="input-label">邮箱</label>
+                            <input class="input-box" type="email" placeholder="请输入邮箱">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">密码</label>
+                            <input class="input-box" type="password" placeholder="请输入密码">
+                        </div>
+                        <button class="btn-main" style="margin-top:10px;">登录</button>
+                        <div style="text-align:right;margin-top:10px;">
+                            <a href="#" style="color:#2b9cff;font-size:13px;">没有账号？注册</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 邮箱邀请注册页面 -->
+            <div class="page-card">
+                <div class="status-bar">
+                    <span>9:41</span>
+                    <div class="flex items-center space-x-1">
+                        <i class="fas fa-signal text-xs"></i>
+                        <i class="fas fa-wifi text-xs"></i>
+                        <i class="fas fa-battery-three-quarters text-xs"></i>
+                    </div>
+                </div>
+                <div class="main-header">
+                    <span class="title">邮箱邀请注册</span>
+                    <div class="header-actions">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+                <div class="page-content flex flex-col items-center justify-center" style="padding-top:40px;">
+                    <div style="margin-bottom:32px;display:flex;justify-content:center;">
+                        <img src="https://img.icons8.com/color/96/000000/handshake.png" alt="logo" style="width:128px;height:128px;">
+                    </div>
+                    <div class="section-card" style="width:100%;max-width:340px;">
+                        <div style="font-size:14px;color:#2b9cff;font-weight:600;margin-bottom:12px;word-break:break-all;">
+                            邀请链接：https://qqcwallet.com/invite/ABCDEFG123456
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">对方邮箱</label>
+                            <input class="input-box" type="email" placeholder="请输入对方邮箱">
+                        </div>
+                        <button class="btn-main" style="margin-top:10px;">发送邀请</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

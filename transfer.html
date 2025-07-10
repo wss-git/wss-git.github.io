@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>转账</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .qr-scanner {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- 顶部导航 -->
+    <div class="gradient-bg text-white p-6">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-arrow-left text-xl"></i>
+                <h1 class="text-xl font-bold">转账</h1>
+            </div>
+            <div class="flex space-x-3">
+                <i class="fas fa-history text-xl"></i>
+                <i class="fas fa-qrcode text-xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- 转账表单 -->
+    <div class="px-6 py-4">
+        <div class="bg-white rounded-2xl p-6 card-shadow">
+            <h3 class="font-semibold mb-4">转账信息</h3>
+            
+            <!-- 收款地址 -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">收款地址</label>
+                <div class="relative">
+                    <input type="text" placeholder="输入或扫描钱包地址" 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <button class="absolute right-2 top-1/2 transform -translate-y-1/2 text-blue-600">
+                        <i class="fas fa-qrcode"></i>
+                    </button>
+                </div>
+                <div class="text-xs text-gray-500 mt-1">支持QQC、ETH、BTC等主流币种</div>
+            </div>
+
+            <!-- 转账金额 -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">转账金额</label>
+                <div class="relative">
+                    <input type="number" placeholder="0.00" 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <div class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500">
+                        QQC
+                    </div>
+                </div>
+                <div class="text-xs text-gray-500 mt-1">可用余额: 2,458.32 QQC</div>
+            </div>
+
+            <!-- 币种选择 -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">选择币种</label>
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="border-2 border-blue-500 bg-blue-50 rounded-xl p-3 text-center">
+                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-coins text-blue-600 text-sm"></i>
+                        </div>
+                        <div class="text-sm font-medium">QQC</div>
+                        <div class="text-xs text-gray-500">余额: 2,458.32</div>
+                    </div>
+                    <div class="border border-gray-200 rounded-xl p-3 text-center">
+                        <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <i class="fab fa-ethereum text-gray-600 text-sm"></i>
+                        </div>
+                        <div class="text-sm font-medium">ETH</div>
+                        <div class="text-xs text-gray-500">余额: 0.5</div>
+                    </div>
+                    <div class="border border-gray-200 rounded-xl p-3 text-center">
+                        <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <i class="fab fa-bitcoin text-gray-600 text-sm"></i>
+                        </div>
+                        <div class="text-sm font-medium">BTC</div>
+                        <div class="text-xs text-gray-500">余额: 0.02</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 手续费 -->
+            <div class="mb-4">
+                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
+                    <span class="text-sm font-medium">网络手续费</span>
+                    <span class="text-sm text-gray-600">0.001 QQC</span>
+                </div>
+            </div>
+
+            <!-- 转账按钮 -->
+            <button class="w-full bg-blue-600 text-white py-3 rounded-xl font-medium">
+                <i class="fas fa-paper-plane mr-2"></i>确认转账
+            </button>
+        </div>
+    </div>
+
+    <!-- 最近转账记录 -->
+    <div class="px-6 mb-6">
+        <div class="bg-white rounded-2xl p-4 card-shadow">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-semibold">最近转账</h3>
+                <span class="text-sm text-blue-600">查看全部</span>
+            </div>
+            
+            <div class="space-y-3">
+                <div class="flex items-center justify-between p-3 border border-gray-200 rounded-xl">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-arrow-up text-red-600"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm font-medium">转出</div>
+                            <div class="text-xs text-gray-500">0x1234...5678</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-semibold text-sm text-red-600">-100.00 QQC</div>
+                        <div class="text-xs text-gray-400">2分钟前</div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between p-3 border border-gray-200 rounded-xl">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-arrow-down text-green-600"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm font-medium">转入</div>
+                            <div class="text-xs text-gray-500">0xabcd...efgh</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-semibold text-sm text-green-600">+50.00 QQC</div>
+                        <div class="text-xs text-gray-400">1小时前</div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between p-3 border border-gray-200 rounded-xl">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-arrow-up text-red-600"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm font-medium">转出</div>
+                            <div class="text-xs text-gray-500">0x9876...5432</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-semibold text-sm text-red-600">-25.50 QQC</div>
+                        <div class="text-xs text-gray-400">3小时前</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 快速转账 -->
+    <div class="px-6 mb-6">
+        <div class="bg-white rounded-2xl p-4 card-shadow">
+            <h3 class="font-semibold mb-4">快速转账</h3>
+            
+            <div class="grid grid-cols-2 gap-3">
+                <div class="text-center p-3 border border-gray-200 rounded-xl">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-qrcode text-blue-600"></i>
+                    </div>
+                    <div class="text-sm font-medium">扫码转账</div>
+                </div>
+                <div class="text-center p-3 border border-gray-200 rounded-xl">
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-address-book text-green-600"></i>
+                    </div>
+                    <div class="text-sm font-medium">通讯录</div>
+                </div>
+                <div class="text-center p-3 border border-gray-200 rounded-xl">
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-share text-purple-600"></i>
+                    </div>
+                    <div class="text-sm font-medium">分享收款</div>
+                </div>
+                <div class="text-center p-3 border border-gray-200 rounded-xl">
+                    <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-history text-orange-600"></i>
+                    </div>
+                    <div class="text-sm font-medium">转账记录</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
